@@ -12,6 +12,8 @@
 
 Convert Figma Make exports into local React projects with automatic setup and import fixing.
 
+**✨ Compatible with VS Code, Cursor, Windsurf, and other VS Code-based editors**
+
 ## Features
 
 - **One-click setup**: Automatically clones figma-make-local-runner repository

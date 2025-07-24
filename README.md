@@ -1,4 +1,4 @@
-# Figma Make Scaffolder - VS Code Extension
+# Figma Make Scaffolder - VS Code Extension (built upon the work of: https://github.com/likang/figma-make-local-runner)
 
 > **Hey [@sucoro-ai](https://www.sucoro.com) & "Shouldn't have had to make this but here we are @figma..."** 
 >

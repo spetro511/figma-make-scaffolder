@@ -1,6 +1,8 @@
 # Figma Make Scaffolder - VS Code Extension
 
 > **Hey [@sucoro-ai](https://www.sucoro.com) & "Shouldn't have had to make this but here we are @figma..."** 
+>
+> ^^asked Copilot to update my readme and it really crushed it. This is siri dictation level execution lmao.
 > 
 > Look, this is what happens when you make a product that does ALMOST everything perfectly and solves a massive pain point in the design-to-dev world. We've all been there - those clients who want everything pixel-perfect, right? Figma Make gets us 95% of the way there, but then... well, here we are building workarounds.
 >

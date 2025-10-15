@@ -14,6 +14,20 @@ Convert Figma Make exports into local React projects with automatic setup and im
 
 **✨ Compatible with VS Code, Cursor, Windsurf, and other VS Code-based editors**
 
+---
+
+## 🎉 **Latest Update: October 15, 2025**
+
+**Three powerful new features added in v1.1.0!**
+
+✨ **Component Preview Generation** - Automatically generates a visual HTML catalog of all your components  
+📊 **Import Fix Reporting** - Get detailed transparency into the import fixing process  
+⚙️ **Configuration Management** - Save and reuse your scaffolding preferences
+
+[Jump to detailed feature descriptions ↓](#new-features-v110)
+
+---
+
 ## Features
 
 - **One-click setup**: Automatically clones figma-make-local-runner repository
@@ -130,29 +144,36 @@ figma-make-scaffolder/
 
 ## New Features (v1.1.0)
 
-### 1. Import Fix Reporting
+<a id="new-features-v110"></a>
+
+### 1. Import Fix Reporting 📊
 Get detailed visibility into the import fixing process:
 - See which files were processed
 - Know how many imports were fixed
-- View the list of all version specifiers that were removed
+- View the list of all version specifiers that were removed (e.g., `@radix-ui/react-slot@1.1.2` → `@radix-ui/react-slot`)
+
+**How to use**: After scaffolding completes, you'll see a notification with a "Show Details" button to view the full import fix report.
 
 This helps you understand what changes were made to your exported code and ensures transparency in the scaffolding process.
 
-### 2. Component Preview Catalog
+### 2. Component Preview Catalog 🎨
 Automatically generate a visual HTML catalog of all components in your Figma Make export:
 - Browse all exported components in one place
 - See component names, file paths, and exports
 - Quickly reference available components while developing
+- Responsive, styled HTML design for easy navigation
 
-Enable this feature in the configuration settings.
+**How to use**: Enable this feature in the configuration settings, and after scaffolding, click "Open Preview" to view the component catalog in your browser.
 
-### 3. Configuration Management
+![Component Preview Example](https://github.com/user-attachments/assets/dd77ab8a-bd7b-4c8f-b03d-a61687b08aea)
+
+### 3. Configuration Management ⚙️
 Save your scaffolding preferences to streamline your workflow:
 - **Auto-start dev server**: Automatically run `npm run dev` after scaffolding
 - **Auto-open project**: Automatically open the new project in a new VS Code window
 - **Generate component preview**: Automatically create the component catalog
 
-Access via Command Palette: "Configure Scaffolder Settings"
+**How to use**: Access via Command Palette: "Configure Scaffolder Settings". Your preferences will be saved and applied to all future scaffolding operations.
 
 
 ## Troubleshooting

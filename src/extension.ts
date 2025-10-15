@@ -32,35 +32,40 @@ async function saveConfig(context: vscode.ExtensionContext, config: ScaffoldConf
 
 async function configureSettings(context: vscode.ExtensionContext) {
     const currentConfig = await loadConfig(context);
+    const newConfig = { ...currentConfig }; // Work with a copy
     
     // Auto-start dev server preference
     const autoStart = await vscode.window.showQuickPick(['Yes', 'No'], {
         placeHolder: `Auto-start dev server after scaffolding? (Current: ${currentConfig.autoStartDevServer ? 'Yes' : 'No'})`
     });
     
-    if (autoStart) {
-        currentConfig.autoStartDevServer = autoStart === 'Yes';
+    if (!autoStart) {
+        return; // User cancelled
     }
+    newConfig.autoStartDevServer = autoStart === 'Yes';
     
     // Auto-open project preference
     const autoOpen = await vscode.window.showQuickPick(['Yes', 'No'], {
         placeHolder: `Auto-open project in new window? (Current: ${currentConfig.autoOpenProject ? 'Yes' : 'No'})`
     });
     
-    if (autoOpen) {
-        currentConfig.autoOpenProject = autoOpen === 'Yes';
+    if (!autoOpen) {
+        return; // User cancelled
     }
+    newConfig.autoOpenProject = autoOpen === 'Yes';
     
     // Component preview preference
     const generatePreview = await vscode.window.showQuickPick(['Yes', 'No'], {
         placeHolder: `Generate component preview catalog? (Current: ${currentConfig.generateComponentPreview ? 'Yes' : 'No'})`
     });
     
-    if (generatePreview) {
-        currentConfig.generateComponentPreview = generatePreview === 'Yes';
+    if (!generatePreview) {
+        return; // User cancelled
     }
+    newConfig.generateComponentPreview = generatePreview === 'Yes';
     
-    await saveConfig(context, currentConfig);
+    // Save all settings together
+    await saveConfig(context, newConfig);
     vscode.window.showInformationMessage('Figma Make Scaffolder configuration saved!');
 }
 
@@ -84,8 +89,8 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(disposable, configCommand);
 }
 
-async function scaffoldFigmaMakeProject(uri?: vscode.Uri, context?: vscode.ExtensionContext) {
-    const config = context ? await loadConfig(context) : {};
+async function scaffoldFigmaMakeProject(uri: vscode.Uri | undefined, context: vscode.ExtensionContext) {
+    const config = await loadConfig(context);
     
     // Step 1: Get target directory
     let targetDir: string;
@@ -265,12 +270,6 @@ async function copyDirectory(src: string, dest: string): Promise<void> {
     }
 }
 
-interface ImportFixReport {
-    filesProcessed: number;
-    filesFixed: number;
-    importsFixed: string[];
-}
-
 async function fixImportStatements(srcDir: string): Promise<ImportFixReport> {
     const report: ImportFixReport = {
         filesProcessed: 0,
@@ -290,17 +289,19 @@ async function fixImportStatements(srcDir: string): Promise<ImportFixReport> {
             
             // Regex to match imports with version specifiers
             // Example: import { Slot } from "@radix-ui/react-slot@1.1.2"
-            const versionSpecifierRegex = /from\s+["']([^"']+)@[\d\.\-\w]+["']/g;
+            const versionSpecifierRegex = /from\s+["']([^"']+)@([\d\.\-\w]+)["']/g;
             
-            const fixedContent = content.replace(versionSpecifierRegex, (match, packageName) => {
-                const importWithVersion = match.match(/["']([^"']+@[\d\.\-\w]+)["']/)?.[1];
-                if (importWithVersion && !report.importsFixed.includes(importWithVersion)) {
+            let hasChanges = false;
+            const fixedContent = content.replace(versionSpecifierRegex, (match, packageName, version) => {
+                const importWithVersion = `${packageName}@${version}`;
+                if (!report.importsFixed.includes(importWithVersion)) {
                     report.importsFixed.push(importWithVersion);
                 }
+                hasChanges = true;
                 return `from "${packageName}"`;
             });
 
-            if (content !== fixedContent) {
+            if (hasChanges) {
                 await fs.promises.writeFile(filePath, fixedContent, 'utf8');
                 report.filesFixed++;
                 console.log(`Fixed imports in: ${filePath}`);
@@ -346,17 +347,30 @@ async function generateComponentPreview(projectDir: string): Promise<void> {
                 } else if (entry.isFile() && entry.name.match(/\.(jsx|tsx)$/)) {
                     // Read file to find exported components
                     const content = await fs.promises.readFile(fullPath, 'utf8');
-                    const exportMatches = content.match(/export\s+(default\s+)?(function|const|class)\s+([A-Z][a-zA-Z0-9]*)/g) || [];
-                    const exportNames = exportMatches.map(match => {
-                        const nameMatch = match.match(/([A-Z][a-zA-Z0-9]*)$/);
-                        return nameMatch ? nameMatch[1] : '';
-                    }).filter(name => name);
+                    
+                    // Match various export patterns more flexibly
+                    const patterns = [
+                        /export\s+(?:default\s+)?(?:function|const|class)\s+([A-Z][a-zA-Z0-9_]*)/g,
+                        /export\s+\{\s*([A-Z][a-zA-Z0-9_,\s]*)\s*\}/g
+                    ];
+                    
+                    const exportNames: string[] = [];
+                    for (const pattern of patterns) {
+                        const matches = content.matchAll(pattern);
+                        for (const match of matches) {
+                            if (match[1]) {
+                                // Handle both single exports and comma-separated exports
+                                const names = match[1].split(',').map(n => n.trim()).filter(n => n && /^[A-Z]/.test(n));
+                                exportNames.push(...names);
+                            }
+                        }
+                    }
                     
                     if (exportNames.length > 0) {
                         components.push({
                             name: entry.name.replace(/\.(jsx|tsx)$/, ''),
                             path: relativePath,
-                            exports: exportNames
+                            exports: [...new Set(exportNames)] // Remove duplicates
                         });
                     }
                 }

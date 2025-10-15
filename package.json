@@ -2,7 +2,7 @@
   "name": "figma-make-scaffolder",
   "displayName": "Figma Make Scaffolder",
   "description": "Convert Figma Make exports to local React projects",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "engines": {
     "vscode": "^1.74.0"
   },
@@ -10,7 +10,8 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:figmaMake.scaffold"
+    "onCommand:figmaMake.scaffold",
+    "onCommand:figmaMake.configure"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -18,6 +19,11 @@
       {
         "command": "figmaMake.scaffold",
         "title": "Scaffold Figma Make Project",
+        "category": "Figma Make"
+      },
+      {
+        "command": "figmaMake.configure",
+        "title": "Configure Scaffolder Settings",
         "category": "Figma Make"
       }
     ],
@@ -32,6 +38,9 @@
       "commandPalette": [
         {
           "command": "figmaMake.scaffold"
+        },
+        {
+          "command": "figmaMake.configure"
         }
       ]
     }

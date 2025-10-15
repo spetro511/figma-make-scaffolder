@@ -14,11 +14,28 @@ Convert Figma Make exports into local React projects with automatic setup and im
 
 **✨ Compatible with VS Code, Cursor, Windsurf, and other VS Code-based editors**
 
+---
+
+## 🎉 **Latest Update: October 15, 2025**
+
+**Three powerful new features added in v1.1.0!**
+
+✨ **Component Preview Generation** - Automatically generates a visual HTML catalog of all your components  
+📊 **Import Fix Reporting** - Get detailed transparency into the import fixing process  
+⚙️ **Configuration Management** - Save and reuse your scaffolding preferences
+
+[Jump to detailed feature descriptions ↓](#new-features-v110)
+
+---
+
 ## Features
 
 - **One-click setup**: Automatically clones figma-make-local-runner repository
 - **Zip extraction**: Extracts Figma Make export files directly into project structure
 - **Import fixing**: Automatically removes version specifiers from imports (e.g., `@radix-ui/react-slot@1.1.2` → `@radix-ui/react-slot`)
+- **Import reporting**: Provides detailed reports on which imports were fixed during scaffolding
+- **Component preview**: Generates an HTML catalog of all components in your export for easy reference
+- **Configuration management**: Save and reuse your scaffolding preferences (auto-start dev server, auto-open project, etc.)
 - **Dependency management**: Installs required dependencies
 - **Integrated terminal**: Optionally starts the dev server immediately
 
@@ -29,7 +46,9 @@ Convert Figma Make exports into local React projects with automatic setup and im
 2. Select "Scaffold Figma Make Project"
 3. Choose your Figma Make .zip export file
 4. Wait for the setup to complete
-5. Choose to open the project and/or start the dev server
+5. View the import fix report (if any imports were fixed)
+6. Choose to open the project and/or start the dev server
+7. View the component preview catalog (if enabled in settings)
 
 ### Method 2: Command Palette
 1. Open Command Palette (`Ctrl+Shift+P` / `Cmd+Shift+P`)
@@ -38,6 +57,14 @@ Convert Figma Make exports into local React projects with automatic setup and im
 4. Choose your Figma Make .zip export file
 5. Wait for the setup to complete
 
+### Method 3: Configure Settings
+1. Open Command Palette (`Ctrl+Shift+P` / `Cmd+Shift+P`)
+2. Type "Configure Scaffolder Settings"
+3. Set your preferences:
+   - Auto-start dev server after scaffolding
+   - Auto-open project in new window
+   - Generate component preview catalog
+
 ## What it does
 
 1. **Clone Repository**: Downloads the latest figma-make-local-runner from GitHub
@@ -45,8 +72,10 @@ Convert Figma Make exports into local React projects with automatic setup and im
 3. **Replace Demo**: Removes the demo app from `src/` directory
 4. **Copy Files**: Moves all your Figma Make files into the `src/` directory
 5. **Fix Imports**: Automatically removes version specifiers that cause conflicts
-6. **Install Dependencies**: Runs `npm install` to set up the project
-7. **Ready to Go**: Project is ready for `npm run dev`
+6. **Report Fixes**: Shows a detailed report of which imports were fixed
+7. **Install Dependencies**: Runs `npm install` to set up the project
+8. **Generate Preview**: Creates an HTML component catalog (if enabled)
+9. **Ready to Go**: Project is ready for `npm run dev`
 
 ## Requirements
 
@@ -97,17 +126,55 @@ figma-make-scaffolder/
 ## Example Workflow
 
 1. Export your project from Figma Make as a .zip file
-2. In VS Code, right-click on your projects folder
-3. Select "Scaffold Figma Make Project"
-4. Select your exported .zip file
-5. The extension will:
+2. (Optional) Configure your preferences using "Configure Scaffolder Settings"
+3. In VS Code, right-click on your projects folder
+4. Select "Scaffold Figma Make Project"
+5. Select your exported .zip file
+6. The extension will:
    - Create a new project folder
    - Clone figma-make-local-runner
    - Extract and copy your files
    - Fix problematic imports
+   - Generate an import fix report
    - Install dependencies
-6. Open the project and run `npm run dev`
-7. Your Figma Make project is now running at `http://localhost:5173`
+   - Generate component preview catalog (if enabled)
+7. Open the project and run `npm run dev`
+8. Your Figma Make project is now running at `http://localhost:5173`
+9. View the component catalog at `COMPONENT_PREVIEW.html` (if generated)
+
+## New Features (v1.1.0)
+
+<a id="new-features-v110"></a>
+
+### 1. Import Fix Reporting 📊
+Get detailed visibility into the import fixing process:
+- See which files were processed
+- Know how many imports were fixed
+- View the list of all version specifiers that were removed (e.g., `@radix-ui/react-slot@1.1.2` → `@radix-ui/react-slot`)
+
+**How to use**: After scaffolding completes, you'll see a notification with a "Show Details" button to view the full import fix report.
+
+This helps you understand what changes were made to your exported code and ensures transparency in the scaffolding process.
+
+### 2. Component Preview Catalog 🎨
+Automatically generate a visual HTML catalog of all components in your Figma Make export:
+- Browse all exported components in one place
+- See component names, file paths, and exports
+- Quickly reference available components while developing
+- Responsive, styled HTML design for easy navigation
+
+**How to use**: Enable this feature in the configuration settings, and after scaffolding, click "Open Preview" to view the component catalog in your browser.
+
+![Component Preview Example](https://github.com/user-attachments/assets/dd77ab8a-bd7b-4c8f-b03d-a61687b08aea)
+
+### 3. Configuration Management ⚙️
+Save your scaffolding preferences to streamline your workflow:
+- **Auto-start dev server**: Automatically run `npm run dev` after scaffolding
+- **Auto-open project**: Automatically open the new project in a new VS Code window
+- **Generate component preview**: Automatically create the component catalog
+
+**How to use**: Access via Command Palette: "Configure Scaffolder Settings". Your preferences will be saved and applied to all future scaffolding operations.
+
 
 ## Troubleshooting
 

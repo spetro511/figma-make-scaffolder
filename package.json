@@ -58,6 +58,6 @@
   },
   "dependencies": {
     "adm-zip": "^0.5.10",
-    "simple-git": "^3.19.1"
+    "simple-git": "^3.36.0"
   }
 }
